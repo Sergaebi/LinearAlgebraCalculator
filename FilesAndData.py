@@ -5,6 +5,7 @@ import os
 import os.path as op
 import pandas as pd
 from tabulate import tabulate
+from BinaryTree import BinarySearchTree
 
 
 class FilesAndData:
