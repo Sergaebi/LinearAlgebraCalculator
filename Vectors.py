@@ -142,7 +142,3 @@ class Vectors:
                 print(f"The answer is: {vector_cross_product}")
                 FilesAndData.plot_result(vector_cross_product)
                 file_object.reading_and_writing_data(saving_wish, coordinates=vector_cross_product)
-            elif calculation_wish == "9":
-                angle_between = vector_1.angle_between_two_vectors(vector_2)
-                print(f"The answer is: {angle_between}")
-                file_object.reading_and_writing_data(saving_wish, angle=angle_between)

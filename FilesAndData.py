@@ -9,23 +9,10 @@ from tabulate import tabulate
 
 class FilesAndData:
 
-    def __init__(self, file_name):
+    def __init__(self, file_name, data):
         """This function checks if file exists in the folder. If file doesn't exist it creates the Json file."""
-        self.file_name = file_name + ".json"
-        if not op.exists(self.file_name):
-            self.print_all(5)
-            create_file_wish = input("> ")
-            if create_file_wish == "1":
-                with open(self.file_name, 'w+') as _file:
-                    _file.write("[{}, {}]")
-                print(f'''\nFile {self.file_name} was created!''')
-                with open(self.file_name, 'r') as _file:
-                    self.data = js.load(_file)
-            else:
-                self.list_and_change_file()
-        else:
-            with open(self.file_name, 'r') as _file:
-                self.data = js.load(_file)
+        self.file_name = file_name
+        self.data = data
 
     def show_or_manipulate_data(self):
         """This function allows user to display, rename, delete data from Json file."""
@@ -36,7 +23,7 @@ class FilesAndData:
         elif database_wish == "2":
             self.show_matrix()
 
-    def reading_and_writing_data(self, save_or_not, coordinates=None, magnitude=None, angle=None, matrix=None):
+    def reading_and_writing_data(self, save_or_not, coordinates=None, magnitude=None, matrix=None):
         """This function writes all data to 'Vector_Data.json' file."""
         if save_or_not == "1":
             if matrix is None:
@@ -51,7 +38,6 @@ class FilesAndData:
                                 'Y': coordinates[1],
                                 'Z': coordinates[2],
                                 'Magnitude': np.sqrt(coordinates[0] ** 2 + coordinates[1] ** 2 + coordinates[2] ** 2),
-                                'Angle': None
                             }
                         elif magnitude:
                             self.data[0][name] = {
@@ -59,15 +45,6 @@ class FilesAndData:
                                 'Y': None,
                                 'Z': None,
                                 'Magnitude': magnitude,
-                                'Angle': None
-                            }
-                        elif angle:
-                            self.data[0][name] = {
-                                'X': None,
-                                'Y': None,
-                                'Z': None,
-                                'Magnitude': None,
-                                'Angle': angle
                             }
                         break
                 with open(self.file_name, 'w') as file2:
@@ -223,21 +200,37 @@ class FilesAndData:
         This function at the beginning allows user to choose file to store data.
         :return: File object.
         """
-        current_directory = os.getcwd()
-        only_files = [f for f in os.listdir(current_directory) if op.isfile(op.join(current_directory, f))]
-        list_of_files = []
-        for i in only_files:
-            if ".json" in i:
-                list_of_files.append(i)
-        if len(list_of_files) == 0:
-            print("\nNo json file. If you want to create one enter the name of the new file.")
-        else:
-            print("\nThese are all files you can store data in.")
-            for i in list_of_files:
-                print(i)
-        cls.print_all(9)
-        file_name = input("> ")
-        return cls(file_name)
+        while True:
+            current_directory = os.getcwd()
+            only_files = [f for f in os.listdir(current_directory) if op.isfile(op.join(current_directory, f))]
+            list_of_files = []
+            for i in only_files:
+                if ".json" in i:
+                    list_of_files.append(i)
+            if len(list_of_files) == 0:
+                print("\nNo json file. If you want to create one enter the name of the new file.")
+            else:
+                print("\nThese are all files you can store data in.")
+                for i in list_of_files:
+                    print(i)
+            cls.print_all(9)
+            file_name = input("> ") + ".json"
+            if not op.exists(file_name):
+                cls.print_all(5)
+                create_file_wish = input("> ")
+                if create_file_wish == "1":
+                    with open(file_name, 'w+') as _file:
+                        _file.write("[{}, {}]")
+                    print(f'''\nFile {file_name} was created!''')
+                    with open(file_name, 'r') as _file:
+                        data = js.load(_file)
+                else:
+                    pass
+            else:
+                with open(file_name, 'r') as _file:
+                    data = js.load(_file)
+                break
+        return cls(file_name, data)
 
     @staticmethod
     def plot_result(operation):
@@ -282,7 +275,6 @@ class FilesAndData:
                      \rEnter "6" if you want to calculate the dot product of two vectors as vector.
                      \rEnter "7" if you want to calculate the cross product of two vectors as number.
                      \rEnter "8" if you want to calculate the cross product of two vectors as vector.
-                     \rEnter "9" if you want to calculate the angle between two vectors.
                      \nIf you want to return to the main menu enter anything else.''')
         elif which_to_print == 2:
             print('''\nIf you want to return to the main menu enter "1".
