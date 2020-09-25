@@ -1,5 +1,5 @@
 import numpy as np
-from OOP.LinearAlgebraCalculator.FilesAndData import FilesAndData
+from FilesAndData import FilesAndData
 
 
 class Matrix:
