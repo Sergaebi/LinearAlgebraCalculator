@@ -222,8 +222,6 @@ class FilesAndData:
                     with open(file_name, 'w+') as _file:
                         _file.write("[{}, {}]")
                     print(f'''\nFile {file_name} was created!''')
-                    with open(file_name, 'r') as _file:
-                        data = js.load(_file)
                 else:
                     pass
             else:
